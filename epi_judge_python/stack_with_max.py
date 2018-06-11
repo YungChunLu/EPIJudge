@@ -1,23 +1,48 @@
 from test_framework import generic_test
 from test_framework.test_failure import TestFailure
-
+import sys
 
 class Stack:
+    def __init__(self):
+        self.data = []
+        self.max_cached = []
+
     def empty(self):
         # TODO - you fill in here.
-        return True
+        return len(self.data) == 0
 
     def max(self):
         # TODO - you fill in here.
-        return 0
+        val = None
+        if self.max_cached:
+            val, _ = self.max_cached[-1]
+        return val
 
     def pop(self):
         # TODO - you fill in here.
-        return 0
+        if self.empty():
+            x = None
+        else:
+            x = self.data.pop()
+            val, count = self.max_cached[-1]
+            if x == val:
+                count -= 1
+                if count == 0:
+                    self.max_cached.pop()
+                else:
+                    self.max_cached[-1] = [val, count]
+        return x
 
     def push(self, x):
         # TODO - you fill in here.
-        return
+        val, count = -sys.maxsize, 0
+        self.data.append(x)
+        if self.max_cached:
+            val, count = self.max_cached[-1]
+        if x > val:
+            self.max_cached.append([x, 1])
+        elif x == val:
+            self.max_cached[-1] = [x, count+1]
 
 
 def stack_tester(ops):
