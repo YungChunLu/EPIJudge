@@ -9,7 +9,22 @@ RED, WHITE, BLUE = range(3)
 
 def dutch_flag_partition(pivot_index, A):
     # TODO - you fill in here.
-    return
+    L = len(A)
+    if L < 1:
+        return A
+    small_idx, large_idx, i = 0, L-1, 0
+    pivot = A[pivot_index]
+    while i <= large_idx:
+        if A[i] < pivot:
+            A[small_idx], A[i] = A[i], A[small_idx]
+            i += 1
+            small_idx += 1
+        elif A[i] == pivot:
+            i += 1
+        else:
+            A[large_idx], A[i] = A[i], A[large_idx]
+            large_idx -= 1
+    return A
 
 
 @enable_executor_hook
@@ -33,6 +48,7 @@ def dutch_flag_partition_wrapper(executor, A, pivot_idx):
         i += 1
 
     if i != len(A):
+        print(A)
         raise TestFailure('Not partitioned after {}th element'.format(i))
     elif any(count):
         raise TestFailure("Some elements are missing from original array")
